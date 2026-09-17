@@ -25,7 +25,7 @@ def relay(source: socket.socket, destination: socket.socket, label: str) -> None
                     line, buffer = buffer.split(b"\n", 1)
                     if not line:
                         continue
-                    print(f"[server] repassando {len(line)} bytes de {label} (conteúdo ilegível para o servidor)")
+                    print(f"[server] repassando {len(line)} bytes de {label}: {line.hex()}")
                     destination.sendall(line + b"\n")
         except OSError:
             pass
