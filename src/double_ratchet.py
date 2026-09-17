@@ -36,15 +36,23 @@ class Header:
     def from_wire(cls, data: dict) -> "Header":
         return cls(dh_public=bytes.fromhex(data["dh_public"]), pn=data["pn"], n=data["n"])
 
+    def __str__(self):
+        return f"dh_public: {self.dh_public.hex()} - pn: {self.pn} - n: {self.n}"
 
+# Key Derivation Function for Root Key
 def kdf_rk(root_key: bytes, dh_output: bytes) -> tuple[bytes, bytes]:
+    print(f"root key: {root_key.hex()} - dh_output: {dh_output.hex()}")
     output = hkdf(dh_output, salt=root_key, info=b"DoubleRatchetRootKey", length=64)
-    return output[:32], output[32:]
+    new_root = output[:32]
+    chain_key = output[32:]
+    print(f"new root: {new_root.hex()} - chain key: {chain_key.hex()}")
+    return new_root, chain_key
 
-
+# Key Derivation Function for Chain Key
 def kdf_ck(chain_key: bytes) -> tuple[bytes, bytes]:
     next_chain_key = hmac.new(chain_key, b"\x02", hashlib.sha256).digest()
     message_key = hmac.new(chain_key, b"\x01", hashlib.sha256).digest()
+    print(f"chain key: {chain_key.hex()} - next chain key: {next_chain_key.hex()} - message key: {message_key.hex()}")
     return next_chain_key, message_key
 
 
@@ -96,9 +104,12 @@ class DoubleRatchet:
         header = Header(dh_public=self.dhs_public, pn=self.pn, n=self.n_send)
         self.n_send += 1
         ciphertext = aes_gcm_encrypt(message_key, plaintext, _header_aad(associated_data, header))
+        print(f"(encrypt) plain text: {plaintext} -  cabecalho: {header}")
         return header, ciphertext
 
     def decrypt(self, header: Header, ciphertext: bytes, associated_data: bytes = b"") -> bytes:
+        print(f"(decrypt) ciphertext: {ciphertext} -  cabecalho: {header}")
+        
         plaintext = self._try_skipped(header, ciphertext, associated_data)
         if plaintext is not None:
             return plaintext
