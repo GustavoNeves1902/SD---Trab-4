@@ -2,10 +2,7 @@
 
 4º Trabalho de Sistemas Distribuídos — Opção 8: AES-256-GCM + X25519 (Double Ratchet) + HKDF (HMAC-SHA256).
 
-- [docs/00-explicacao-simples.md](docs/00-explicacao-simples.md) — explicação didática, para leigos
-- [docs/01-conceitos.md](docs/01-conceitos.md) — visão geral conceitual/técnica
-- [docs/02-implementacao-e-limitacoes.md](docs/02-implementacao-e-limitacoes.md) — mapeamento teoria → código, limitações e trade-offs
-- [docs/03-fundamentos-e-mercado.md](docs/03-fundamentos-e-mercado.md) — bases matemáticas e comparação com cenários reais de mercado
+Documentação completa em [docs/documentacao.md](docs/documentacao.md) (também disponível em [docs/documentacao.docx](docs/documentacao.docx)), cobrindo: explicação didática para leigos, visão geral conceitual, fundamentos matemáticos com comparação a cenários reais de mercado, e o mapeamento implementação → teoria com limitações e trade-offs.
 
 ## Estrutura
 
